@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>零食笔记</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "PingFang SC", sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .form-box {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #ff6b81;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .search {
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .title {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .score-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .score-box {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .blue {
+      background: #eef5ff;
+      color: #2979ff;
+    }
+
+    .pink {
+      background: #fff0f5;
+      color: #ff4d8d;
+    }
+
+    .price {
+      font-size: 28px;
+      color: #ff6b35;
+      margin-bottom: 10px;
+    }
+
+    .note {
+      margin-top: 10px;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .time {
+      margin-top: 15px;
+      color: #999;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍟 零食笔记</h1>
+
+  <div class="form-box">
+
+    <input type="file" id="imageInput" accept="image/*" />
+
+    <input
+      type="text"
+      id="nameInput"
+      placeholder="零食名称"
+    />
+
+    <input
+      type="number"
+      id="priceInput"
+      placeholder="价格"
+    />
+
+    <select id="blueScore">
+      <option value="1">蓝色评分 1</option>
+      <option value="2">蓝色评分 2</option>
+      <option value="3">蓝色评分 3</option>
+      <option value="4">蓝色评分 4</option>
+      <option value="5">蓝色评分 5</option>
+    </select>
+
+    <select id="pinkScore">
+      <option value="1">粉色评分 1</option>
+      <option value="2">粉色评分 2</option>
+      <option value="3">粉色评分 3</option>
+      <option value="4">粉色评分 4</option>
+      <option value="5">粉色评分 5</option>
+    </select>
+
+    <textarea
+      id="noteInput"
+      placeholder="备注"
+    ></textarea>
+
+    <button onclick="addSnack()">
+      添加零食
+    </button>
+
+  </div>
+
+  <input
+    class="search"
+    type="text"
+    id="searchInput"
+    placeholder="🔍 搜索零食"
+    oninput="renderSnacks()"
+  />
+
+  <div id="snackList"></div>
+
+  <script>
+
+    let snacks =
+      JSON.parse(localStorage.getItem("snacks")) || [];
+
+    function saveData() {
+      localStorage.setItem(
+        "snacks",
+        JSON.stringify(snacks)
+      );
+    }
+
+    function addSnack() {
+
+      const file =
+        document.getElementById("imageInput").files[0];
+
+      const name =
+        document.getElementById("nameInput").value;
+
+      const price =
+        document.getElementById("priceInput").value;
+
+      const blue =
+        document.getElementById("blueScore").value;
+
+      const pink =
+        document.getElementById("pinkScore").value;
+
+      const note =
+        document.getElementById("noteInput").value;
+
+      if (!file || !name) {
+        alert("请填写完整");
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+
+        snacks.unshift({
+          image: e.target.result,
+          name,
+          price,
+          blue,
+          pink,
+          note,
+          createdAt:
+            new Date().toLocaleString()
+        });
+
+        saveData();
+
+        renderSnacks();
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+
+    function renderSnacks() {
+
+      const keyword =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+      const snackList =
+        document.getElementById("snackList");
+
+      snackList.innerHTML = "";
+
+      const filtered =
+        snacks.filter(snack =>
+          snack.name.toLowerCase()
+          .includes(keyword)
+        );
+
+      filtered.forEach(snack => {
+
+        snackList.innerHTML += `
+          <div class="card">
+
+            <img src="${snack.image}" />
+
+            <div class="content">
+
+              <div class="title">
+                ${snack.name}
+              </div>
+
+              <div class="score-row">
+
+                <div class="score-box blue">
+                  蓝色评分<br>
+                  ${snack.blue}/5
+                </div>
+
+                <div class="score-box pink">
+                  粉色评分<br>
+                  ${snack.pink}/5
+                </div>
+
+              </div>
+
+              <div class="price">
+                ¥${snack.price}
+              </div>
+
+              <div class="note">
+                ${snack.note}
+              </div>
+
+              <div class="time">
+                添加时间：
+                ${snack.createdAt}
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      });
+
+    }
+
+    renderSnacks();
+
+  </script>
+
+</body>
+</html>

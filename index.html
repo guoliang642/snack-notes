@@ -472,7 +472,40 @@ function addSnack(){
 
 }
 
-function deleteSnack(index){
+function editSnack(index){
+
+  const snack = snacks[index];
+
+  const newName =
+  prompt("修改零食名称", snack.name);
+
+  if(newName === null) return;
+
+  const newPrice =
+  prompt("修改价格", snack.price);
+
+  if(newPrice === null) return;
+
+  const newNote =
+  prompt("修改备注", snack.note);
+
+  if(newNote === null) return;
+
+  snack.name = newName;
+  snack.price = newPrice;
+  snack.note = newNote;
+
+  snack.updatedAt =
+  new Date().toLocaleString();
+
+  saveData();
+
+  renderSnacks();
+
+  openDetail(index);
+
+}
+  function deleteSnack(index){
 
   const result =
   confirm("确定删除这个零食吗？");
@@ -537,23 +570,7 @@ function renderSnacks(){
           ¥${snack.price}
         </div>
 
-        <div class="card-buttons">
-
-          <button
-            class="view-btn"
-            onclick="openDetail(${index})"
-          >
-            查看
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteSnack(${index})"
-          >
-            删除
-          </button>
-
-        </div>
+       
 
       </div>
 
@@ -620,6 +637,27 @@ function openDetail(index){
     <div class="section">
 
       <div class="section-title">
+      <div class="section">
+
+  <div class="card-buttons">
+
+    <button
+      class="view-btn"
+      onclick="editSnack(${index})"
+    >
+      编辑
+    </button>
+
+    <button
+      class="delete-btn"
+     onclick="event.stopPropagation(); deleteSnack(${index})"
+    >
+      删除
+    </button>
+
+  </div>
+
+</div>
         添加记录
       </div>
 

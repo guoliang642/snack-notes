@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>零食笔记</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC",sans-serif;}
 body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
 .app{width:100%;max-width:430px;position:relative;}
 .title{font-size:34px;font-weight:700;margin-bottom:18px;}
-.search{width:100%;border:none;padding:16px;border-radius:20px;margin-bottom:8px;background:white;box-shadow:0 4px 14px rgba(0,0,0,0.05);font-size:15px;}
-.tags-container{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.tag-btn{padding:6px 12px;border-radius:14px;background:#ffe4eb;color:#ff4f87;font-size:13px;cursor:pointer;transition:0.2s;}
-.tag-btn.active{background:#ff4f87;color:white;}
+.search{width:100%;border:none;padding:16px;border-radius:20px;margin-bottom:16px;background:white;box-shadow:0 4px 14px rgba(0,0,0,0.05);font-size:15px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,0.06);transition:0.25s;cursor:pointer;}
 .card:hover{transform:translateY(-4px);}
@@ -40,13 +37,11 @@ body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
 .view-btn,.delete-btn{flex:1;border:none;padding:10px;border-radius:14px;font-size:13px;font-weight:700;}
 .view-btn{background:#111;color:white;}
 .delete-btn{background:#ffe4eb;color:#ff4f87;}
-.add-btn{display:none;}
 .fab{position:fixed;right:24px;bottom:24px;width:64px;height:64px;border-radius:50%;background:#ff4f87;color:white;font-size:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.3);cursor:pointer;z-index:1000;}
 .add-form{display:none;position:fixed;bottom:100px;right:24px;width:300px;background:white;padding:18px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.2);z-index:1000;}
 .add-form input,.add-form select,.add-form textarea{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:none;background:#f5f5f7;font-size:14px;}
 .add-form textarea{min-height:80px;resize:none;}
 .add-form button{width:100%;padding:12px;border:none;border-radius:14px;background:#ff5f7a;color:white;font-weight:700;margin-top:12px;cursor:pointer;}
-.add-tag-input{width:100%;padding:10px;border-radius:14px;border:none;background:#f5f5f7;margin-top:8px;font-size:14px;}
 @media(max-width:700px){.grid{grid-template-columns:1fr;}.add-form{width:90%;right:5%;}}
 </style>
 </head>
@@ -54,16 +49,15 @@ body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
 <div class="app">
   <div class="title">🍟 零食笔记</div>
   <input class="search" id="searchInput" placeholder="搜索零食..." oninput="renderSnacks()">
-  <div class="tags-container" id="tagsContainer"></div>
   <div class="grid" id="snackGrid"></div>
 </div>
 
-<!-- 浮动添加按钮 -->
 <div class="fab" id="fab">+</div>
 
-<!-- 弹出添加表单 -->
 <div class="add-form" id="addForm">
-  <input type="file" id="imageInput">
+  <input type="file" id="coverInput" placeholder="零食封皮">
+  <input type="file" id="ingredientsInput" placeholder="配料表">
+  <input type="file" id="nutritionInput" placeholder="营养成分表">
   <input type="text" id="nameInput" placeholder="零食名称">
   <input type="number" id="priceInput" placeholder="价格">
   <select id="tasteInput">
@@ -80,8 +74,6 @@ body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
     <option value="4">回购评分 4</option>
     <option value="5">回购评分 5</option>
   </select>
-  <div id="tagCheckboxes"></div>
-  <input type="text" class="add-tag-input" id="newTagInput" placeholder="新增标签并回车">
   <textarea id="noteInput" placeholder="备注..."></textarea>
   <button onclick="addSnack()">添加零食</button>
 </div>
@@ -92,44 +84,80 @@ body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
 </div>
 
 <script>
-// 数据
-let snacks=JSON.parse(localStorage.getItem("snacks"))||[];
-let tags=JSON.parse(localStorage.getItem("tags"))||["甜食","辣味","新品"];
-let activeTag="";
+let snacks = JSON.parse(localStorage.getItem("snacks")) || [];
 
-// 保存
 function saveData(){
-  localStorage.setItem("snacks",JSON.stringify(snacks));
-  localStorage.setItem("tags",JSON.stringify(tags));
+  localStorage.setItem("snacks", JSON.stringify(snacks));
 }
 
-// 渲染标签按钮
-function renderTags(){
-  const container=document.getElementById("tagsContainer");
-  container.innerHTML="";
-  tags.forEach(tag=>{
-    const btn=document.createElement("div");
-    btn.className="tag-btn"+(activeTag===tag?" active":"");
-    btn.innerText=tag;
-    btn.onclick=()=>{
-      activeTag=(activeTag===tag?"":tag);
-      renderTags(); renderSnacks();
-    };
-    container.appendChild(btn);
-  });
-}
+function addSnack(){
+  const cover = document.getElementById("coverInput").files[0];
+  const ingredients = document.getElementById("ingredientsInput").files[0];
+  const nutrition = document.getElementById("nutritionInput").files[0];
+  const name = document.getElementById("nameInput").value;
+  const price = document.getElementById("priceInput").value;
+  const taste = document.getElementById("tasteInput").value;
+  const buy = document.getElementById("buyInput").value;
+  const note = document.getElementById("noteInput").value;
 
-// 渲染零食
-function renderSnacks(){
-  const keyword=document.getElementById("searchInput").value.toLowerCase();
-  const grid=document.getElementById("snackGrid"); grid.innerHTML="";
-  let filtered=snacks.filter(snack=>snack.name.toLowerCase().includes(keyword));
-  if(activeTag){
-    filtered=filtered.filter(s=>s.tags&&s.tags.includes(activeTag));
+  if(!cover || !ingredients || !nutrition || !name){
+    alert("请填写完整");
+    return;
   }
+
+  const reader1 = new FileReader();
+  const reader2 = new FileReader();
+  const reader3 = new FileReader();
+
+  reader1.onload = function(e1){
+    reader2.onload = function(e2){
+      reader3.onload = function(e3){
+        snacks.unshift({
+          images: [e1.target.result, e2.target.result, e3.target.result],
+          name, price, taste, buy, note,
+          createdAt: new Date().toLocaleString(),
+          updatedAt: new Date().toLocaleString()
+        });
+        saveData();
+        renderSnacks();
+        closeAddForm();
+        document.getElementById("coverInput").value="";
+        document.getElementById("ingredientsInput").value="";
+        document.getElementById("nutritionInput").value="";
+        document.getElementById("nameInput").value="";
+        document.getElementById("priceInput").value="";
+        document.getElementById("noteInput").value="";
+      }
+      reader3.readAsDataURL(nutrition);
+    }
+    reader2.readAsDataURL(ingredients);
+  }
+  reader1.readAsDataURL(cover);
+}
+
+function editSnack(index){
+  const snack = snacks[index];
+  const newName = prompt("修改零食名称", snack.name); if(newName===null) return;
+  const newPrice = prompt("修改价格", snack.price); if(newPrice===null) return;
+  const newNote = prompt("修改备注", snack.note); if(newNote===null) return;
+  snack.name = newName; snack.price = newPrice; snack.note = newNote;
+  snack.updatedAt = new Date().toLocaleString();
+  saveData(); renderSnacks(); openDetail(index);
+}
+
+function deleteSnack(index){
+  if(confirm("确定删除这个零食吗？")){
+    snacks.splice(index,1); saveData(); renderSnacks(); closeModal();
+  }
+}
+
+function renderSnacks(){
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+  const grid = document.getElementById("snackGrid"); grid.innerHTML="";
+  const filtered = snacks.filter(snack=>snack.name.toLowerCase().includes(keyword));
   filtered.forEach((snack,index)=>{
     grid.innerHTML+=`<div class="card" onclick="openDetail(${index})">
-      <img src="${snack.image}">
+      <img src="${snack.images[0]}">
       <div class="card-content">
         <div class="card-title">${snack.name}</div>
         <div class="score-row">
@@ -142,48 +170,12 @@ function renderSnacks(){
   });
 }
 
-// 添加零食
-function addSnack(){
-  const file=document.getElementById("imageInput").files[0];
-  const name=document.getElementById("nameInput").value;
-  const price=document.getElementById("priceInput").value;
-  const taste=document.getElementById("tasteInput").value;
-  const buy=document.getElementById("buyInput").value;
-  const note=document.getElementById("noteInput").value;
-  const checkboxes=document.querySelectorAll("#tagCheckboxes input[type=checkbox]:checked");
-  const selectedTags=Array.from(checkboxes).map(cb=>cb.value);
-  if(!file||!name){alert("请填写完整");return;}
-  const reader=new FileReader();
-  reader.onload=function(e){
-    snacks.unshift({image:e.target.result,name,price,taste,buy,note,tags:selectedTags,createdAt:new Date().toLocaleString(),updatedAt:new Date().toLocaleString()});
-    saveData(); renderSnacks(); closeAddForm(); renderTags();
-    document.getElementById("nameInput").value=""; document.getElementById("priceInput").value=""; document.getElementById("noteInput").value=""; document.getElementById("imageInput").value="";
-  };
-  reader.readAsDataURL(file);
-}
-
-// 编辑零食
-function editSnack(index){
-  const snack=snacks[index];
-  const newName=prompt("修改零食名称",snack.name); if(newName===null)return;
-  const newPrice=prompt("修改价格",snack.price); if(newPrice===null)return;
-  const newNote=prompt("修改备注",snack.note); if(newNote===null)return;
-  const tagInput=prompt("修改标签，用逗号分隔", snack.tags?snack.tags.join(","):"");
-  const newTags=tagInput?tagInput.split(",").map(s=>s.trim()).filter(s=>s):[];
-  snack.name=newName; snack.price=newPrice; snack.note=newNote; snack.tags=newTags;
-  snack.updatedAt=new Date().toLocaleString();
-  saveData(); renderSnacks(); renderTags(); openDetail(index);
-}
-
-// 删除零食
-function deleteSnack(index){if(confirm("确定删除这个零食吗？")){snacks.splice(index,1);saveData();renderSnacks();closeModal();}}
-
-// 打开详情
 function openDetail(index){
-  const snack=snacks[index];
-  document.getElementById("modal").style.display="block";
-  document.getElementById("modalContent").innerHTML=`
-    <img src="${snack.image}">
+  const snack = snacks[index];
+  let imgIndex = 0;
+  document.getElementById("modal").style.display = "block";
+  document.getElementById("modalContent").innerHTML = `
+    <img id="modalImage" src="${snack.images[imgIndex]}">
     <div class="detail">
       <div class="detail-title">${snack.name}</div>
       <div class="detail-score">
@@ -192,51 +184,47 @@ function openDetail(index){
       </div>
       <div class="detail-price">¥${snack.price}</div>
       <div class="section">
+        <button onclick="prevImage(${index})">上一张</button>
+        <button onclick="nextImage(${index})">下一张</button>
+      </div>
+      <div class="section">
+        <div class="section-title">备注</div>
+        <div class="note">${snack.note||"暂无备注"}</div>
+      </div>
+      <div class="section">
+        <div class="section-title">添加记录</div>
+        <div class="time">添加时间：${snack.createdAt}<br><br>修改时间：${snack.updatedAt}</div>
+      </div>
+      <div class="section">
         <div class="card-buttons">
           <button class="view-btn" onclick="editSnack(${index})">编辑</button>
           <button class="delete-btn" onclick="event.stopPropagation();deleteSnack(${index})">删除</button>
         </div>
       </div>
-      <div class="section"><div class="section-title">备注</div><div class="note">${snack.note||"暂无备注"}</div></div>
-      <div class="section"><div class="section-title">标签</div><div class="note">${(snack.tags||[]).join(", ")}</div></div>
-      <div class="section"><div class="section-title">添加记录</div><div class="time">添加时间：${snack.createdAt}<br><br>修改时间：${snack.updatedAt}</div></div>
-    </div>`;
+    </div>
+  `;
+  window.currentImageIndex = 0;
 }
 
-// 关闭 modal
 function closeModal(){document.getElementById("modal").style.display="none";}
-
-// 浮动加号显示表单
-const fab=document.getElementById("fab");
-const addForm=document.getElementById("addForm");
-fab.addEventListener("click",()=>{addForm.style.display=(addForm.style.display==="block")?"none":"block";});
-
-// 关闭添加表单
+const fab = document.getElementById("fab");
+const addForm = document.getElementById("addForm");
+fab.addEventListener("click",()=>{addForm.style.display = (addForm.style.display==="block")?"none":"block";});
 function closeAddForm(){addForm.style.display="none";}
 
-// 渲染标签选择复选框
-function renderTagCheckboxes(){
-  const container=document.getElementById("tagCheckboxes"); container.innerHTML="";
-  tags.forEach(tag=>{
-    const label=document.createElement("label");
-    label.style.marginRight="6px";
-    const cb=document.createElement("input"); cb.type="checkbox"; cb.value=tag;
-    label.appendChild(cb); label.appendChild(document.createTextNode(" "+tag));
-    container.appendChild(label);
-  });
+function nextImage(index){
+  const snack = snacks[index];
+  window.currentImageIndex = (window.currentImageIndex + 1) % 3;
+  document.getElementById("modalImage").src = snack.images[window.currentImageIndex];
 }
 
-// 添加新标签
-const newTagInput=document.getElementById("newTagInput");
-newTagInput.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    const val=newTagInput.value.trim();
-    if(val && !tags.includes(val)){tags.push(val);saveData();renderTags();renderTagCheckboxes();}
-    newTagInput.value="";
-  }
-});
+function prevImage(index){
+  const snack = snacks[index];
+  window.currentImageIndex = (window.currentImageIndex + 2) % 3; // 往前一张
+  document.getElementById("modalImage").src = snack.images[window.currentImageIndex];
+}
 
-renderTags(); renderTagCheckboxes(); renderSnacks();
+renderSnacks();
 </script>
 </body>
 </html>

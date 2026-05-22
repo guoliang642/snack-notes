@@ -3,694 +3,195 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 <title>零食笔记</title>
-
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"PingFang SC",sans-serif;
-}
-
-body{
-  background:#f3f3f5;
-  display:flex;
-  justify-content:center;
-  padding:20px;
-}
-
-.app{
-
-  width:100%;
-  max-width:430px;
-
-}
-
-.title{
-
-  font-size:34px;
-  font-weight:700;
-  margin-bottom:18px;
-
-}
-
-.search{
-
-  width:100%;
-  border:none;
-  padding:16px;
-  border-radius:20px;
-  margin-bottom:20px;
-  background:white;
-  box-shadow:0 4px 14px rgba(0,0,0,0.05);
-  font-size:15px;
-
-}
-
-.add-box{
-
-  background:white;
-  border-radius:30px;
-  padding:18px;
-  margin-bottom:24px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.06);
-
-}
-
-.add-box input,
-.add-box textarea,
-.add-box select{
-
-  width:100%;
-  margin-top:12px;
-  border:none;
-  background:#f5f5f7;
-  padding:15px;
-  border-radius:18px;
-  font-size:15px;
-
-}
-
-.add-box textarea{
-
-  min-height:90px;
-  resize:none;
-
-}
-
-.add-btn{
-
-  width:100%;
-  border:none;
-  margin-top:16px;
-  background:#ff5f7a;
-  color:white;
-  padding:16px;
-  border-radius:18px;
-  font-size:16px;
-  font-weight:700;
-
-}
-
-.grid{
-
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-
-}
-
-.card{
-
-  background:white;
-  border-radius:24px;
-  overflow:hidden;
-  box-shadow:0 8px 22px rgba(0,0,0,0.06);
-  transition:0.25s;
-
-}
-
-.card:hover{
-
-  transform:translateY(-4px);
-
-}
-
-.card img{
-
-  width:100%;
-  height:160px;
-  object-fit:cover;
-
-}
-
-.card-content{
-
-  padding:14px;
-
-}
-
-.card-title{
-
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:10px;
-
-}
-
-.score-row{
-
-  display:flex;
-  gap:8px;
-  margin-bottom:10px;
-
-}
-
-.score{
-
-  flex:1;
-  padding:8px;
-  border-radius:14px;
-  font-size:12px;
-  text-align:center;
-  font-weight:700;
-
-}
-
-.orange{
-
-  background:#fff3df;
-  color:#ff9800;
-
-}
-
-.pink{
-
-  background:#ffe4eb;
-  color:#ff4f87;
-
-}
-
-.price{
-
-  font-size:24px;
-  font-weight:700;
-  color:#ff6b35;
-
-}
-
-.card-buttons{
-
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-
-}
-
-.view-btn,
-.delete-btn{
-
-  flex:1;
-  border:none;
-  padding:10px;
-  border-radius:14px;
-  font-size:13px;
-  font-weight:700;
-
-}
-
-.view-btn{
-
-  background:#111;
-  color:white;
-
-}
-
-.delete-btn{
-
-  background:#ffe4eb;
-  color:#ff4f87;
-
-}
-
-.modal{
-
-  position:fixed;
-  inset:0;
-  background:white;
-  z-index:999;
-  overflow-y:auto;
-  display:none;
-
-}
-
-.close-btn{
-
-  position:fixed;
-  top:20px;
-  right:20px;
-  width:46px;
-  height:46px;
-  border:none;
-  border-radius:50%;
-  background:white;
-  font-size:20px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.15);
-
-}
-
-.modal img{
-
-  width:100%;
-  height:320px;
-  object-fit:cover;
-
-}
-
-.detail{
-
-  padding:22px;
-
-}
-
-.detail-title{
-
-  font-size:30px;
-  font-weight:700;
-  margin-bottom:18px;
-
-}
-
-.detail-score{
-
-  display:flex;
-  gap:12px;
-  margin-bottom:18px;
-
-}
-
-.detail-box{
-
-  flex:1;
-  padding:14px;
-  border-radius:18px;
-  text-align:center;
-  font-weight:700;
-
-}
-
-.detail-price{
-
-  font-size:34px;
-  font-weight:700;
-  color:#ff6b35;
-  margin-bottom:24px;
-
-}
-
-.section{
-
-  margin-top:26px;
-
-}
-
-.section-title{
-
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:12px;
-
-}
-
-.note{
-
-  background:#f7f7f7;
-  padding:18px;
-  border-radius:18px;
-  line-height:1.8;
-  color:#555;
-
-}
-
-.time{
-
-  color:#888;
-  line-height:1.8;
-
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC",sans-serif;}
+body{background:#f3f3f5;display:flex;justify-content:center;padding:20px;}
+.app{width:100%;max-width:430px;position:relative;}
+.title{font-size:34px;font-weight:700;margin-bottom:18px;}
+.search{width:100%;border:none;padding:16px;border-radius:20px;margin-bottom:20px;background:white;box-shadow:0 4px 14px rgba(0,0,0,0.05);font-size:15px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,0.06);transition:0.25s;cursor:pointer;}
+.card:hover{transform:translateY(-4px);}
+.card img{width:100%;height:160px;object-fit:cover;}
+.card-content{padding:14px;}
+.card-title{font-size:18px;font-weight:700;margin-bottom:10px;}
+.score-row{display:flex;gap:8px;margin-bottom:10px;}
+.score{flex:1;padding:8px;border-radius:14px;font-size:12px;text-align:center;font-weight:700;}
+.orange{background:#fff3df;color:#ff9800;}
+.pink{background:#ffe4eb;color:#ff4f87;}
+.price{font-size:24px;font-weight:700;color:#ff6b35;}
+.modal{position:fixed;inset:0;background:white;z-index:999;overflow-y:auto;display:none;}
+.close-btn{position:fixed;top:20px;right:20px;width:46px;height:46px;border:none;border-radius:50%;background:white;font-size:20px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.modal img{width:100%;height:320px;object-fit:cover;}
+.detail{padding:22px;}
+.detail-title{font-size:30px;font-weight:700;margin-bottom:18px;}
+.detail-score{display:flex;gap:12px;margin-bottom:18px;}
+.detail-box{flex:1;padding:14px;border-radius:18px;text-align:center;font-weight:700;}
+.detail-price{font-size:34px;font-weight:700;color:#ff6b35;margin-bottom:24px;}
+.section{margin-top:26px;}
+.section-title{font-size:18px;font-weight:700;margin-bottom:12px;}
+.note{background:#f7f7f7;padding:18px;border-radius:18px;line-height:1.8;color:#555;}
+.time{color:#888;line-height:1.8;}
+.card-buttons{display:flex;gap:12px;margin-top:12px;}
+.view-btn,.delete-btn{flex:1;border:none;padding:10px;border-radius:14px;font-size:13px;font-weight:700;}
+.view-btn{background:#111;color:white;}
+.delete-btn{background:#ffe4eb;color:#ff4f87;}
+.add-btn{display:none;} /* 隐藏原来的按钮 */
+.fab{position:fixed;right:24px;bottom:24px;width:64px;height:64px;border-radius:50%;background:#ff4f87;color:white;font-size:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.3);cursor:pointer;z-index:1000;}
+.add-form{display:none;position:fixed;bottom:100px;right:24px;width:300px;background:white;padding:18px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.2);z-index:1000;}
+.add-form input,.add-form select,.add-form textarea{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:none;background:#f5f5f7;font-size:14px;}
+.add-form textarea{min-height:80px;resize:none;}
+.add-form button{width:100%;padding:12px;border:none;border-radius:14px;background:#ff5f7a;color:white;font-weight:700;margin-top:12px;cursor:pointer;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}.add-form{width:90%;right:5%;}}
 </style>
 </head>
-
 <body>
-
 <div class="app">
-
-  <div class="title">
-    🍟 零食笔记
-  </div>
-
-  <input
-    class="search"
-    id="searchInput"
-    placeholder="搜索零食..."
-    oninput="renderSnacks()"
-  >
-
-  <div class="add-box">
-
-    <input type="file" id="imageInput">
-
-    <input
-      type="text"
-      id="nameInput"
-      placeholder="零食名称"
-    >
-
-    <input
-      type="number"
-      id="priceInput"
-      placeholder="价格"
-    >
-
-    <select id="tasteInput">
-
-      <option value="1">口味评分 1</option>
-      <option value="2">口味评分 2</option>
-      <option value="3">口味评分 3</option>
-      <option value="4">口味评分 4</option>
-      <option value="5">口味评分 5</option>
-
-    </select>
-
-    <select id="buyInput">
-
-      <option value="1">回购评分 1</option>
-      <option value="2">回购评分 2</option>
-      <option value="3">回购评分 3</option>
-      <option value="4">回购评分 4</option>
-      <option value="5">回购评分 5</option>
-
-    </select>
-
-    <textarea
-      id="noteInput"
-      placeholder="备注..."
-    ></textarea>
-
-    <button class="add-btn" onclick="addSnack()">
-      添加零食
-    </button>
-
-  </div>
-
+  <div class="title">🍟 零食笔记</div>
+  <input class="search" id="searchInput" placeholder="搜索零食..." oninput="renderSnacks()">
   <div class="grid" id="snackGrid"></div>
+</div>
 
+<!-- 浮动添加按钮 -->
+<div class="fab" id="fab">+</div>
+
+<!-- 弹出添加表单 -->
+<div class="add-form" id="addForm">
+  <input type="file" id="imageInput">
+  <input type="text" id="nameInput" placeholder="零食名称">
+  <input type="number" id="priceInput" placeholder="价格">
+  <select id="tasteInput">
+    <option value="1">口味评分 1</option>
+    <option value="2">口味评分 2</option>
+    <option value="3">口味评分 3</option>
+    <option value="4">口味评分 4</option>
+    <option value="5">口味评分 5</option>
+  </select>
+  <select id="buyInput">
+    <option value="1">回购评分 1</option>
+    <option value="2">回购评分 2</option>
+    <option value="3">回购评分 3</option>
+    <option value="4">回购评分 4</option>
+    <option value="5">回购评分 5</option>
+  </select>
+  <textarea id="noteInput" placeholder="备注..."></textarea>
+  <button onclick="addSnack()">添加零食</button>
 </div>
 
 <div class="modal" id="modal">
-
-  <button
-    class="close-btn"
-    onclick="closeModal()"
-  >
-    ✕
-  </button>
-
+  <button class="close-btn" onclick="closeModal()">✕</button>
   <div id="modalContent"></div>
-
 </div>
 
 <script>
+let snacks=JSON.parse(localStorage.getItem("snacks"))||[];
 
-let snacks =
-JSON.parse(localStorage.getItem("snacks")) || [];
-
-function saveData(){
-
-  localStorage.setItem(
-    "snacks",
-    JSON.stringify(snacks)
-  );
-
-}
+function saveData(){localStorage.setItem("snacks",JSON.stringify(snacks));}
 
 function addSnack(){
-
-  const file =
-  document.getElementById("imageInput").files[0];
-
-  const name =
-  document.getElementById("nameInput").value;
-
-  const price =
-  document.getElementById("priceInput").value;
-
-  const taste =
-  document.getElementById("tasteInput").value;
-
-  const buy =
-  document.getElementById("buyInput").value;
-
-  const note =
-  document.getElementById("noteInput").value;
-
-  if(!file || !name){
-
-    alert("请填写完整");
-    return;
-
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function(e){
-
-    snacks.unshift({
-
-      image:e.target.result,
-      name,
-      price,
-      taste,
-      buy,
-      note,
-      createdAt:new Date().toLocaleString(),
-      updatedAt:new Date().toLocaleString()
-
-    });
-
-    saveData();
-
-    renderSnacks();
-
+  const file=document.getElementById("imageInput").files[0];
+  const name=document.getElementById("nameInput").value;
+  const price=document.getElementById("priceInput").value;
+  const taste=document.getElementById("tasteInput").value;
+  const buy=document.getElementById("buyInput").value;
+  const note=document.getElementById("noteInput").value;
+  if(!file||!name){alert("请填写完整");return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    snacks.unshift({image:e.target.result,name,price,taste,buy,note,createdAt:new Date().toLocaleString(),updatedAt:new Date().toLocaleString()});
+    saveData(); renderSnacks(); closeAddForm();
+    // 清空表单
+    document.getElementById("nameInput").value="";
+    document.getElementById("priceInput").value="";
+    document.getElementById("noteInput").value="";
+    document.getElementById("imageInput").value="";
   };
-
   reader.readAsDataURL(file);
-
 }
 
 function editSnack(index){
-
-  const snack = snacks[index];
-
-  const newName =
-  prompt("修改零食名称", snack.name);
-
-  if(newName === null) return;
-
-  const newPrice =
-  prompt("修改价格", snack.price);
-
-  if(newPrice === null) return;
-
-  const newNote =
-  prompt("修改备注", snack.note);
-
-  if(newNote === null) return;
-
-  snack.name = newName;
-  snack.price = newPrice;
-  snack.note = newNote;
-
-  snack.updatedAt =
-  new Date().toLocaleString();
-
-  saveData();
-
-  renderSnacks();
-
-  openDetail(index);
-
+  const snack=snacks[index];
+  const newName=prompt("修改零食名称",snack.name);
+  if(newName===null)return;
+  const newPrice=prompt("修改价格",snack.price);
+  if(newPrice===null)return;
+  const newNote=prompt("修改备注",snack.note);
+  if(newNote===null)return;
+  snack.name=newName; snack.price=newPrice; snack.note=newNote;
+  snack.updatedAt=new Date().toLocaleString();
+  saveData(); renderSnacks(); openDetail(index);
 }
-  function deleteSnack(index){
 
-  const result =
-  confirm("确定删除这个零食吗？");
-
-  if(result){
-
-    snacks.splice(index,1);
-
-    saveData();
-
-    renderSnacks();
-
+function deleteSnack(index){
+  if(confirm("确定删除这个零食吗？")){
+    snacks.splice(index,1); saveData(); renderSnacks(); closeModal();
   }
-
 }
 
 function renderSnacks(){
-
-  const keyword =
-  document.getElementById("searchInput")
-  .value
-  .toLowerCase();
-
-  const grid =
-  document.getElementById("snackGrid");
-
-  grid.innerHTML = "";
-
-  const filtered =
-  snacks.filter(snack =>
-    snack.name.toLowerCase()
-    .includes(keyword)
-  );
-
+  const keyword=document.getElementById("searchInput").value.toLowerCase();
+  const grid=document.getElementById("snackGrid"); grid.innerHTML="";
+  const filtered=snacks.filter(snack=>snack.name.toLowerCase().includes(keyword));
   filtered.forEach((snack,index)=>{
-
-    grid.innerHTML += `
-
-    <div class="card">
-
+    grid.innerHTML+=`<div class="card" onclick="openDetail(${index})">
       <img src="${snack.image}">
-
       <div class="card-content">
-
-        <div class="card-title">
-          ${snack.name}
-        </div>
-
+        <div class="card-title">${snack.name}</div>
         <div class="score-row">
-
-          <div class="score orange">
-            口味 ${snack.taste}/5
-          </div>
-
-          <div class="score pink">
-            回购 ${snack.buy}/5
-          </div>
-
+          <div class="score orange">口味 ${snack.taste}/5</div>
+          <div class="score pink">回购 ${snack.buy}/5</div>
         </div>
-
-        <div class="price">
-          ¥${snack.price}
-        </div>
-
-       
-
+        <div class="price">¥${snack.price}</div>
       </div>
-
-    </div>
-
-    `;
-
+    </div>`;
   });
-
 }
 
 function openDetail(index){
-
-  const snack = snacks[index];
-
-  document.getElementById("modal")
-  .style.display = "block";
-
-  document.getElementById("modalContent")
-  .innerHTML = `
-
-  <img src="${snack.image}">
-
-  <div class="detail">
-
-    <div class="detail-title">
-      ${snack.name}
-    </div>
-
-    <div class="detail-score">
-
-      <div class="detail-box orange">
-
-        口味评分<br>
-        ${snack.taste}/5
-
+  const snack=snacks[index];
+  document.getElementById("modal").style.display="block";
+  document.getElementById("modalContent").innerHTML=`
+    <img src="${snack.image}">
+    <div class="detail">
+      <div class="detail-title">${snack.name}</div>
+      <div class="detail-score">
+        <div class="detail-box orange">口味评分<br>${snack.taste}/5</div>
+        <div class="detail-box pink">回购评分<br>${snack.buy}/5</div>
       </div>
-
-      <div class="detail-box pink">
-
-        回购评分<br>
-        ${snack.buy}/5
-
-      </div>
-
-    </div>
-
-    <div class="detail-price">
-      ¥${snack.price}
-    </div>
-
-    <div class="section">
-
-      <div class="section-title">
-        备注
-      </div>
-
-      <div class="note">
-        ${snack.note || "暂无备注"}
-      </div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="section-title">
+      <div class="detail-price">¥${snack.price}</div>
       <div class="section">
-
-  <div class="card-buttons">
-
-    <button
-      class="view-btn"
-      onclick="editSnack(${index})"
-    >
-      编辑
-    </button>
-
-    <button
-      class="delete-btn"
-     onclick="event.stopPropagation(); deleteSnack(${index})"
-    >
-      删除
-    </button>
-
-  </div>
-
-</div>
-        添加记录
+        <div class="card-buttons">
+          <button class="view-btn" onclick="editSnack(${index})">编辑</button>
+          <button class="delete-btn" onclick="event.stopPropagation(); deleteSnack(${index})">删除</button>
+        </div>
       </div>
-
-      <div class="time">
-
-        添加时间：
-        ${snack.createdAt}
-
-        <br><br>
-
-        修改时间：
-        ${snack.updatedAt}
-
+      <div class="section">
+        <div class="section-title">备注</div>
+        <div class="note">${snack.note || "暂无备注"}</div>
       </div>
-
+      <div class="section">
+        <div class="section-title">添加记录</div>
+        <div class="time">
+          添加时间：${snack.createdAt}<br><br>
+          修改时间：${snack.updatedAt}
+        </div>
+      </div>
     </div>
-
-  </div>
-
   `;
-
 }
 
-function closeModal(){
+function closeModal(){document.getElementById("modal").style.display="none";}
 
-  document.getElementById("modal")
-  .style.display = "none";
-
-}
+// 控制浮动添加表单显示
+const fab=document.getElementById("fab");
+const addForm=document.getElementById("addForm");
+fab.addEventListener("click",()=>{
+  addForm.style.display=(addForm.style.display==="block")?"none":"block";
+});
+function closeAddForm(){addForm.style.display="none";}
 
 renderSnacks();
-
 </script>
-
 </body>
 </html>

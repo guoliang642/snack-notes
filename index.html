@@ -1,314 +1,558 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>零食笔记</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "PingFang SC", sans-serif;
-    }
+<title>零食笔记</title>
 
-    body {
-      background: #f5f5f5;
-      padding: 20px;
-    }
+<style>
 
-    h1 {
-      margin-bottom: 20px;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"PingFang SC",sans-serif;
+}
 
-    .form-box {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-    }
+body{
+  background:#f5f5f7;
+  color:#111;
+  padding:20px;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-    }
+.top-bar{
+  margin-bottom:24px;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: #ff6b81;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.title{
+  font-size:34px;
+  font-weight:700;
+  margin-bottom:16px;
+}
 
-    .search {
-      margin-bottom: 20px;
-    }
+.search{
+  width:100%;
+  padding:14px 18px;
+  border:none;
+  border-radius:20px;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(20px);
+  font-size:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
+.add-box{
+  background:white;
+  border-radius:28px;
+  padding:20px;
+  margin-bottom:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
 
-    .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
+.add-box input,
+.add-box textarea,
+.add-box select{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:#f3f3f5;
+  font-size:15px;
+}
 
-    .content {
-      padding: 16px;
-    }
+.add-box textarea{
+  min-height:100px;
+  resize:none;
+}
 
-    .title {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
+.upload-btn{
+  margin-top:16px;
+  width:100%;
+  border:none;
+  border-radius:18px;
+  padding:16px;
+  background:#ff5f7a;
+  color:white;
+  font-size:16px;
+  font-weight:600;
+}
 
-    .score-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
 
-    .score-box {
-      flex: 1;
-      padding: 10px;
-      border-radius: 12px;
-      text-align: center;
-    }
+.card{
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 10px 24px rgba(0,0,0,0.06);
+  cursor:pointer;
+  transition:0.25s;
+}
 
-    .blue {
-      background: #eef5ff;
-      color: #2979ff;
-    }
+.card:hover{
+  transform:translateY(-4px);
+}
 
-    .pink {
-      background: #fff0f5;
-      color: #ff4d8d;
-    }
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
 
-    .price {
-      font-size: 28px;
-      color: #ff6b35;
-      margin-bottom: 10px;
-    }
+.card-content{
+  padding:14px;
+}
 
-    .note {
-      margin-top: 10px;
-      line-height: 1.7;
-      color: #555;
-    }
+.card-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:10px;
+}
 
-    .time {
-      margin-top: 15px;
-      color: #999;
-      font-size: 13px;
-    }
-  </style>
+.score-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.score{
+  flex:1;
+  padding:8px;
+  border-radius:14px;
+  font-size:13px;
+  text-align:center;
+  font-weight:600;
+}
+
+.taste{
+  background:#fff3df;
+  color:#ff9800;
+}
+
+.buy{
+  background:#ffe4eb;
+  color:#ff4f87;
+}
+
+.price{
+  font-size:24px;
+  font-weight:700;
+  color:#ff6b35;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:white;
+  z-index:999;
+  overflow-y:auto;
+  display:none;
+}
+
+.modal img{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+}
+
+.detail{
+  padding:22px;
+}
+
+.detail-title{
+  font-size:30px;
+  font-weight:700;
+  margin-bottom:16px;
+}
+
+.detail-score{
+  display:flex;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.detail-box{
+  flex:1;
+  padding:14px;
+  border-radius:18px;
+  text-align:center;
+  font-weight:700;
+}
+
+.orange{
+  background:#fff3df;
+  color:#ff9800;
+}
+
+.pink{
+  background:#ffe4eb;
+  color:#ff4f87;
+}
+
+.detail-price{
+  font-size:34px;
+  font-weight:700;
+  color:#ff6b35;
+  margin-bottom:22px;
+}
+
+.section{
+  margin-top:26px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.note{
+  line-height:1.8;
+  color:#555;
+  background:#f7f7f7;
+  padding:18px;
+  border-radius:18px;
+}
+
+.info-images{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+}
+
+.info-images img{
+  width:160px;
+  height:160px;
+  border-radius:20px;
+  object-fit:cover;
+}
+
+.time{
+  color:#888;
+  line-height:1.8;
+}
+
+.close-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  width:46px;
+  height:46px;
+  border:none;
+  border-radius:50%;
+  background:white;
+  font-size:20px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+@media(max-width:700px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
 </head>
+
 <body>
 
-  <h1>🍟 零食笔记</h1>
+<div class="top-bar">
 
-  <div class="form-box">
-
-    <input type="file" id="imageInput" accept="image/*" />
-
-    <input
-      type="text"
-      id="nameInput"
-      placeholder="零食名称"
-    />
-
-    <input
-      type="number"
-      id="priceInput"
-      placeholder="价格"
-    />
-
-    <select id="blueScore">
-      <option value="1">口味评分 1</option>
-      <option value="2">口味评分 2</option>
-      <option value="3">口味评分 3</option>
-      <option value="4">口味评分 4</option>
-      <option value="5">口味评分 5</option>
-    </select>
-
-    <select id="pinkScore">
-      <option value="1">回购评分 1</option>
-      <option value="2">回购评分 2</option>
-      <option value="3">回购评分 3</option>
-      <option value="4">回购评分 4</option>
-      <option value="5">回购评分 5</option>
-    </select>
-
-    <textarea
-      id="noteInput"
-      placeholder="备注"
-    ></textarea>
-
-    <button onclick="addSnack()">
-      添加零食
-    </button>
-
+  <div class="title">
+    🍟 零食笔记
   </div>
 
   <input
     class="search"
-    type="text"
     id="searchInput"
-    placeholder="🔍 搜索零食"
+    placeholder="搜索零食..."
     oninput="renderSnacks()"
   />
 
-  <div id="snackList"></div>
+</div>
 
-  <script>
+<div class="add-box">
 
-    let snacks =
-      JSON.parse(localStorage.getItem("snacks")) || [];
+  <input type="file" id="imageInput" accept="image/*">
 
-    function saveData() {
-      localStorage.setItem(
-        "snacks",
-        JSON.stringify(snacks)
-      );
-    }
+  <input
+    type="text"
+    id="nameInput"
+    placeholder="零食名称"
+  >
 
-    function addSnack() {
+  <input
+    type="number"
+    id="priceInput"
+    placeholder="价格"
+  >
 
-      const file =
-        document.getElementById("imageInput").files[0];
+  <select id="tasteInput">
+    <option value="1">口味评分 1</option>
+    <option value="2">口味评分 2</option>
+    <option value="3">口味评分 3</option>
+    <option value="4">口味评分 4</option>
+    <option value="5">口味评分 5</option>
+  </select>
 
-      const name =
-        document.getElementById("nameInput").value;
+  <select id="buyInput">
+    <option value="1">回购评分 1</option>
+    <option value="2">回购评分 2</option>
+    <option value="3">回购评分 3</option>
+    <option value="4">回购评分 4</option>
+    <option value="5">回购评分 5</option>
+  </select>
 
-      const price =
-        document.getElementById("priceInput").value;
+  <textarea
+    id="noteInput"
+    placeholder="备注..."
+  ></textarea>
 
-      const blue =
-        document.getElementById("blueScore").value;
+  <button class="upload-btn" onclick="addSnack()">
+    添加零食
+  </button>
 
-      const pink =
-        document.getElementById("pinkScore").value;
+</div>
 
-      const note =
-        document.getElementById("noteInput").value;
+<div class="grid" id="snackGrid"></div>
 
-      if (!file || !name) {
-        alert("请填写完整");
-        return;
-      }
+<div class="modal" id="modal">
 
-      const reader = new FileReader();
+  <button class="close-btn" onclick="closeModal()">
+    ✕
+  </button>
 
-      reader.onload = function(e) {
+  <div id="modalContent"></div>
 
-        snacks.unshift({
-          image: e.target.result,
-          name,
-          price,
-          blue,
-          pink,
-          note,
-          createdAt:
-            new Date().toLocaleString()
-        });
+</div>
 
-        saveData();
+<script>
 
-        renderSnacks();
+let snacks =
+JSON.parse(localStorage.getItem("snacks")) || [];
 
-      };
+function saveData(){
+  localStorage.setItem(
+    "snacks",
+    JSON.stringify(snacks)
+  );
+}
 
-      reader.readAsDataURL(file);
+function addSnack(){
 
-    }
+  const file =
+  document.getElementById("imageInput").files[0];
 
-    function renderSnacks() {
+  const name =
+  document.getElementById("nameInput").value;
 
-      const keyword =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
+  const price =
+  document.getElementById("priceInput").value;
 
-      const snackList =
-        document.getElementById("snackList");
+  const taste =
+  document.getElementById("tasteInput").value;
 
-      snackList.innerHTML = "";
+  const buy =
+  document.getElementById("buyInput").value;
 
-      const filtered =
-        snacks.filter(snack =>
-          snack.name.toLowerCase()
-          .includes(keyword)
-        );
+  const note =
+  document.getElementById("noteInput").value;
 
-      filtered.forEach(snack => {
+  if(!file || !name){
+    alert("请填写完整");
+    return;
+  }
 
-        snackList.innerHTML += `
-          <div class="card">
+  const reader = new FileReader();
 
-            <img src="${snack.image}" />
+  reader.onload = function(e){
 
-            <div class="content">
+    snacks.unshift({
+      image:e.target.result,
+      name,
+      price,
+      taste,
+      buy,
+      note,
+      createdAt:new Date().toLocaleString(),
+      updatedAt:new Date().toLocaleString()
+    });
 
-              <div class="title">
-                ${snack.name}
-              </div>
-
-              <div class="score-row">
-
-                <div class="score-box blue">
-                  口味评分<br>
-                  ${snack.blue}/5
-                </div>
-
-                <div class="score-box pink">
-                  回购评分<br>
-                  ${snack.pink}/5
-                </div>
-
-              </div>
-
-              <div class="price">
-                ¥${snack.price}
-              </div>
-
-              <div class="note">
-                ${snack.note}
-              </div>
-
-              <div class="time">
-                添加时间：
-                ${snack.createdAt}
-              </div>
-
-            </div>
-
-          </div>
-        `;
-
-      });
-
-    }
+    saveData();
 
     renderSnacks();
 
-  </script>
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+function renderSnacks(){
+
+  const grid =
+  document.getElementById("snackGrid");
+
+  const keyword =
+  document.getElementById("searchInput")
+  .value
+  .toLowerCase();
+
+  grid.innerHTML = "";
+
+  const filtered =
+  snacks.filter(snack =>
+    snack.name.toLowerCase()
+    .includes(keyword)
+  );
+
+  filtered.forEach((snack,index)=>{
+
+    grid.innerHTML += `
+
+    <div class="card"
+      onclick="openDetail(${index})">
+
+      <img src="${snack.image}">
+
+      <div class="card-content">
+
+        <div class="card-title">
+          ${snack.name}
+        </div>
+
+        <div class="score-row">
+
+          <div class="score taste">
+            口味 ${snack.taste}/5
+          </div>
+
+          <div class="score buy">
+            回购 ${snack.buy}/5
+          </div>
+
+        </div>
+
+        <div class="price">
+          ¥${snack.price}
+        </div>
+
+      </div>
+
+    </div>
+
+    `;
+
+  });
+
+}
+
+function openDetail(index){
+
+  const snack = snacks[index];
+
+  document.getElementById("modal")
+  .style.display = "block";
+
+  document.getElementById("modalContent")
+  .innerHTML = `
+
+  <img src="${snack.image}">
+
+  <div class="detail">
+
+    <div class="detail-title">
+      ${snack.name}
+    </div>
+
+    <div class="detail-score">
+
+      <div class="detail-box orange">
+        口味评分<br>
+        ${snack.taste}/5
+      </div>
+
+      <div class="detail-box pink">
+        回购评分<br>
+        ${snack.buy}/5
+      </div>
+
+    </div>
+
+    <div class="detail-price">
+      ¥${snack.price}
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        备注
+      </div>
+
+      <div class="note">
+        ${snack.note || "暂无备注"}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        食品信息
+      </div>
+
+      <div class="info-images">
+
+        <img src="${snack.image}">
+        <img src="${snack.image}">
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        添加记录
+      </div>
+
+      <div class="time">
+
+        添加时间：
+        ${snack.createdAt}
+
+        <br><br>
+
+        修改时间：
+        ${snack.updatedAt}
+
+      </div>
+
+    </div>
+
+  </div>
+
+  `;
+
+}
+
+function closeModal(){
+
+  document.getElementById("modal")
+  .style.display = "none";
+
+}
+
+renderSnacks();
+
+</script>
 
 </body>
 </html>
